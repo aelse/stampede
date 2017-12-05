@@ -3,7 +3,21 @@
 Stampede is a cache stampede avoidance library implementing the XFetch algorithm.
 Use this package to optimally determine when any cacheable item should be refreshed.
 
-## What is a cache stampede?
+# Usage
+
+Whenever you access an item from the cache call stampede.XFetch to see if the cache
+record should be refreshed (yes, even if it hasn't expired - that's the point!).
+
+```
+item, ttl := cache.get(key)
+cost := time.Second // it takes this long to rebuild the cache item
+
+if !item || stampede.XFetch(ttl, cost, 1) {
+    // refresh the cache
+}
+```
+
+# What is a cache stampede?
 
 A typical pattern for accessing an item from cache looks something like:
 
@@ -29,7 +43,7 @@ efficiency is improved as fewer calls are made to the expensive generation code.
 
 We implement a variation of the XFetch algorithm to determine when an item should be refreshed.
 
-## Why do I need this?
+# Why do I need this?
 
 Stampede will help you easily choose an optimal time to refresh items in your cache,
 whatever the purpose of the cache may be.
@@ -39,7 +53,12 @@ multiple threads/processes/systems. This might be as simple as an authentication
 token in your running process that requires regeneration periodically, or maybe
 frequently used data in memcached or redis shared by multiple systems.
 
-## More information
+# License
+
+Code and other files in this repository are released under terms of the BSD 3-clause license.
+Please see the LICENSE file.
+
+# More information
 
 This package uses ideas from a paper titled [Optimal Probabilistic Cache Stampede Prevention](https://dl.acm.org/citation.cfm?id=2757813).
 
