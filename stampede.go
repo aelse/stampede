@@ -26,12 +26,12 @@ end
 */
 
 // XFetch implements the selection component of the XFetch algorithm.
-// expiry: is the time.Duration until the cache value expires
+// expiry: is the time.Duration until the cache value expires. Should always be positive
 // ∆ -> cost: time it takes to regenerate the cached value
 // β -> scaling (1 is a reasonable default): can be increased to more aggressively avoid stampedes
 func XFetch(expiry time.Duration, cost time.Duration, scaling float64) bool {
 	c := float64(cost)
-	d := c * scaling * math.Log(rnd.Float64())
+	d := c * scaling * -1 * math.Log(rnd.Float64()) // logE{0..1} is negative.
 	delta := time.Duration(int(d))
 	if delta > expiry {
 		return true
