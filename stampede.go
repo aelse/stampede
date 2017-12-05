@@ -7,7 +7,6 @@ import (
 	"time"
 )
 
-// Using a fixed seed results in the same output every run but we do not care here.
 var rnd = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 /*
