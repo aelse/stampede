@@ -10,7 +10,10 @@ import (
 var rnd = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 /*
-The XFetch algorithm as described in `Optimal Probabilistic Cache Stampede Prevention`.
+The stampede package provides `ShouldRefresh` implementing probabilistic cache refresh.
+This relies on an implementation of the XFetech algorithm.
+
+XFetch is described in `Optimal Probabilistic Cache Stampede Prevention`.
 
 function XFetch(key, ttl; β = 1)
 	value, ∆, expiry ← CacheRead(key)
@@ -24,11 +27,11 @@ function XFetch(key, ttl; β = 1)
 end
 */
 
-// XFetch implements the selection component of the XFetch algorithm.
+// ShouldRefresh implements the selection component of the XFetch algorithm.
 // expiry: is the time.Duration until the cache value expires. Should always be positive
 // ∆ -> cost: time it takes to regenerate the cached value
 // β -> scaling (1 is a reasonable default): can be increased to more aggressively avoid stampedes
-func XFetch(expiry time.Duration, cost time.Duration, scaling float64) bool {
+func ShouldRefresh(expiry time.Duration, cost time.Duration, scaling float64) bool {
 	c := float64(cost)
 	d := c * scaling * -1 * math.Log(rnd.Float64()) // logE{0..1} is negative.
 	delta := time.Duration(int(d))
