@@ -32,8 +32,5 @@ func XFetch(expiry time.Duration, cost time.Duration, scaling float64) bool {
 	c := float64(cost)
 	d := c * scaling * -1 * math.Log(rnd.Float64()) // logE{0..1} is negative.
 	delta := time.Duration(int(d))
-	if delta > expiry {
-		return true
-	}
-	return false
+	return delta > expiry
 }
