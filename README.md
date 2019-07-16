@@ -12,7 +12,7 @@ record should be refreshed (yes, even if it hasn't expired - that's the point!).
 item, ttl := cache.get(key)
 cost := time.Second // it takes this long to rebuild the cache item
 
-if !item || stampede.XFetch(ttl, cost, 1) {
+if !item || stampede.ShouldRefresh(ttl, cost, 1) {
     // refresh the cache
 }
 ```
