@@ -33,14 +33,13 @@ func TestShouldRefreshDistributionByExpiry(t *testing.T) {
 	cost := 100 * time.Millisecond
 	lastRefreshCount := 0
 	for ttl := time.Second; ttl >= 0; ttl -= 100 * time.Millisecond {
-		t.Logf("ttl %v", ttl)
 		shouldRefreshCount := 0
 		for i := 0; i < 5000; i++ {
 			if stampede.ShouldRefresh(ttl, cost, 2) {
 				shouldRefreshCount++
 			}
 		}
-		t.Logf("current %d, last %d", shouldRefreshCount, lastRefreshCount)
+		t.Logf("ttl %v, current %d, last %d", ttl, shouldRefreshCount, lastRefreshCount)
 		if lastRefreshCount > shouldRefreshCount {
 			t.Errorf("Expected refresh count to be greater than previous round")
 		}
